@@ -81,9 +81,18 @@ function createTreeNode(item) {
     return li;
 }
 
-function buildFolderEl(item) {
+export function buildFolderEl(item) {
     const wrapper = document.createDocumentFragment();
+    const row = createFolderRow(item);
+    setupFolderEvents(row, item);
+    const childrenUl = buildFolderChildren(item);
 
+    wrapper.appendChild(row);
+    wrapper.appendChild(childrenUl);
+    return wrapper;
+}
+
+function createFolderRow(item) {
     const row = document.createElement('div');
     row.className = ['folder-item', item.isOpen ? 'open' : '', item.id === state.currentItemId ? 'active' : ''].join(' ').trim();
     row.dataset.id = item.id;
@@ -96,7 +105,10 @@ function buildFolderEl(item) {
             </svg>
         </span>
         <span class="folder-item-title">${escapeHtml(item.title)}</span>`;
+    return row;
+}
 
+function setupFolderEvents(row, item) {
     row.addEventListener('click', e => {
         e.stopPropagation();
         if (state.currentItemId === item.id) {
@@ -126,15 +138,14 @@ function buildFolderEl(item) {
         const draggedId = e.dataTransfer.getData('text/plain');
         if (draggedId && draggedId !== item.id) moveItem(draggedId, item.id);
     });
+}
 
+function buildFolderChildren(item) {
     const childrenUl = document.createElement('ul');
     childrenUl.className = 'folder-children' + (item.isOpen ? ' open' : '');
     sortItems(state.items.filter(c => c.parentId === item.id))
         .forEach(child => childrenUl.appendChild(createTreeNode(child)));
-
-    wrapper.appendChild(row);
-    wrapper.appendChild(childrenUl);
-    return wrapper;
+    return childrenUl;
 }
 
 function buildFileEl(item) {
