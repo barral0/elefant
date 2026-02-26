@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const fsPromises = fs.promises;
@@ -18,6 +18,22 @@ function createWindow() {
         backgroundColor: '#1e1e24',
         autoHideMenuBar: true,
         frame: false, // frameless window to unite controls
+    });
+
+    // Intercept new window requests (e.g., target="_blank") and open in external browser
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        if (url.startsWith('https:') || url.startsWith('http:')) {
+            shell.openExternal(url);
+        }
+        return { action: 'deny' };
+    });
+
+    // Intercept in-page navigation (e.g. clicking a link)
+    mainWindow.webContents.on('will-navigate', (event, url) => {
+        if (url.startsWith('https:') || url.startsWith('http:')) {
+            event.preventDefault();
+            shell.openExternal(url);
+        }
     });
 
     // Remove the default toolbar menu completely
