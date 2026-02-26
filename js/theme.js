@@ -16,6 +16,7 @@ const themeResetBtn = document.getElementById('theme-reset-btn');
 const langSelect = document.getElementById('lang-select');
 
 import { setLang, getLang } from './i18n.js';
+import { hexToHsl } from './utils.js';
 
 const THEME_DEFAULTS = {
     mode: 'dark',
@@ -83,21 +84,7 @@ accentSwatches.addEventListener('click', e => {
 });
 
 accentCustom.addEventListener('input', e => {
-    const hex = e.target.value;
-    const r = parseInt(hex.slice(1, 3), 16) / 255;
-    const g = parseInt(hex.slice(3, 5), 16) / 255;
-    const b = parseInt(hex.slice(5, 7), 16) / 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
-    let h = 0, s = 0, l = (max + min) / 2;
-    if (d) {
-        s = d / (1 - Math.abs(2 * l - 1));
-        if (max === r) h = ((g - b) / d + 6) % 6;
-        else if (max === g) h = (b - r) / d + 2;
-        else h = (r - g) / d + 4;
-        h = Math.round(h * 60);
-    }
-    s = Math.round(s * 100); l = Math.round(l * 100);
-    theme.accent = `${h},${s}%,${l}%`;
+    theme.accent = hexToHsl(e.target.value);
     accentSwatches.querySelectorAll('.swatch[data-hsl]').forEach(sw => sw.classList.remove('active'));
     applyTheme(); saveTheme();
 });
