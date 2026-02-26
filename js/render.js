@@ -16,12 +16,34 @@ const fileListEl = document.getElementById('file-list');
 const noteTitleInput = document.getElementById('note-title');
 
 // ── Image reference resolver ─────────────────────────────────
-function resolveImageRefs(md) {
-    return md.replace(/!\[([^\]]*)\]\(img:\/\/([^)\s]+)(?:\s*=(\d+)x)?\)/g, (_, alt, imgId, w) => {
+
+/**
+ * Regex explanation:
+ * !\[           -> Match opening ![
+ * ([^\]]*)      -> Capture group 1 (alt text): anything except ]
+ * \]            -> Match closing ]
+ * \(            -> Match opening (
+ * img:\/\/      -> Match img:// literal
+ * ([^)\s]+)     -> Capture group 2 (image ID): non-whitespace, non-closing-paren chars
+ * (?:           -> Non-capturing group for optional width
+ *   \s*=(\d+)x  ->   Match space (optional) + = + digits (Group 3, width) + x
+ * )?            -> End optional group
+ * \)            -> Match closing )
+ */
+const REF_REGEX = /!\[([^\]]*)\]\(img:\/\/([^)\s]+)(?:\s*=(\d+)x)?\)/g;
+
+export function resolveImageRefs(md) {
+    return md.replace(REF_REGEX, (_, alt, imgId, w) => {
         const src = state.imageStore[imgId];
+        // Note: we don't escape alt here because it returns back to markdown,
+        // which will be processed by marked.js later.
         if (!src) return `![${alt} (image not found)]()`;
+
         const sizeAttr = w ? ` width="${w}"` : '';
-        return `<img src="${src}" alt="${alt}"${sizeAttr} style="max-width:100%">`;
+        // IMPORTANT: Escape alt text to prevent XSS via attributes
+        // escapeHtml is imported from ./utils.js
+        const safeAlt = escapeHtml(alt);
+        return `<img src="${src}" alt="${safeAlt}"${sizeAttr} style="max-width:100%">`;
     });
 }
 
