@@ -25,10 +25,14 @@ export async function createNote(parentId = null) {
     };
 
     if (window.electronAPI) {
-        const parent = state.items.find(i => i.id === parentId);
+        if (!note.parentId && state.items.some(i => i.id === 'fs-root')) {
+            note.parentId = 'fs-root';
+        }
+
+        const parent = state.items.find(i => i.id === note.parentId);
         if (parent && parent.fsPath) {
             note.fsPath = await window.electronAPI.joinPath(parent.fsPath, note.title);
-            await window.electronAPI.writeFile(note.fsPath, '');
+            await window.electronAPI.writeFile(note.fsPath, note.content);
         }
     }
 
@@ -47,7 +51,6 @@ export async function createFolder() {
     };
 
     if (window.electronAPI) {
-        // Fallback root is fs-root
         const root = state.items.find(i => i.id === 'fs-root');
         if (root && root.fsPath) {
             folder.parentId = 'fs-root';
