@@ -1,7 +1,10 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { createFsHandlers } = require('./fs-handlers');
+
 const fsPromises = fs.promises;
+const handlers = createFsHandlers(fsPromises, path);
 
 let mainWindow;
 
@@ -61,7 +64,7 @@ ipcMain.handle('window:close', () => {
 // ── IPC Listeners for Local FS ─────────────────────────────────
 
 // Utility path join
-ipcMain.handle('fs:joinPath', (_, ...parts) => path.join(...parts));
+ipcMain.handle('fs:joinPath', (_, ...parts) => handlers.joinPath(...parts));
 
 // 1. Open Directory Picker dialog
 ipcMain.handle('dialog:openDirectory', async () => {
@@ -73,113 +76,19 @@ ipcMain.handle('dialog:openDirectory', async () => {
 });
 
 // 2. Read all files in a directory (recursive) looking for .md files
-ipcMain.handle('fs:readDirectory', async (_, dirPath) => {
-    const items = [];
-
-    async function scan(currentPath, parentId = null) {
-        const entries = await fsPromises.readdir(currentPath, { withFileTypes: true });
-        for (const entry of entries) {
-            // Ignore hidden files / node_modules
-            if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
-
-            const fullPath = path.join(currentPath, entry.name);
-            const id = Buffer.from(fullPath).toString('base64'); // use path as stable ID
-
-            if (entry.isDirectory()) {
-                items.push({
-                    id,
-                    type: 'folder',
-                    parentId,
-                    title: entry.name,
-                    isOpen: false,
-                    fsPath: fullPath,
-                });
-                await scan(fullPath, id);
-            } else if (entry.isFile()) {
-                const lowerName = entry.name.toLowerCase();
-                const isMarkdown = lowerName.endsWith('.md');
-                const isImage = /\.(png|jpe?g|gif|webp|svg)$/.test(lowerName);
-
-                if (isMarkdown || isImage) {
-                    const stats = await fsPromises.stat(fullPath);
-                    items.push({
-                        id,
-                        type: isMarkdown ? 'file' : 'image', // custom 'image' type for sidebar
-                        parentId,
-                        title: entry.name,
-                        lastModified: stats.mtimeMs,
-                        fsPath: fullPath,
-                        // Content is loaded lazily to save memory
-                    });
-                }
-            }
-        }
-    }
-
-    try {
-        await scan(dirPath);
-        return items;
-    } catch (err) {
-        console.error('Failed to read directory:', err);
-        return null;
-    }
-});
+ipcMain.handle('fs:readDirectory', (_, dirPath) => handlers.readDirectory(dirPath));
 
 // 3. Read a specific file's content
-ipcMain.handle('fs:readFile', async (_, filePath) => {
-    try {
-        return await fsPromises.readFile(filePath, 'utf8');
-    } catch (err) {
-        console.error('Failed to read file:', err);
-        return null;
-    }
-});
+ipcMain.handle('fs:readFile', (_, filePath) => handlers.readFile(filePath));
 
 // 4. Save file to disk
-ipcMain.handle('fs:writeFile', async (_, filePath, content) => {
-    try {
-        await fsPromises.writeFile(filePath, content, 'utf8');
-        return true;
-    } catch (err) {
-        console.error('Failed to write file:', err);
-        return false;
-    }
-});
+ipcMain.handle('fs:writeFile', (_, filePath, content) => handlers.writeFile(filePath, content));
 
 // 5. Create new folder
-ipcMain.handle('fs:mkdir', async (_, dirPath) => {
-    try {
-        await fsPromises.mkdir(dirPath, { recursive: true });
-        return true;
-    } catch (err) {
-        console.error('Failed to create folder:', err);
-        return false;
-    }
-});
+ipcMain.handle('fs:mkdir', (_, dirPath) => handlers.mkdir(dirPath));
 
 // 6. Delete file or folder
-ipcMain.handle('fs:delete', async (_, itemPath) => {
-    try {
-        const stat = await fsPromises.stat(itemPath);
-        if (stat.isDirectory()) {
-            await fsPromises.rm(itemPath, { recursive: true, force: true });
-        } else {
-            await fsPromises.unlink(itemPath);
-        }
-        return true;
-    } catch (err) {
-        console.error('Failed to delete item:', err);
-        return false;
-    }
-});
+ipcMain.handle('fs:delete', (_, itemPath) => handlers.deleteItem(itemPath));
 
 // 7. Rename file or folder
-ipcMain.handle('fs:rename', async (_, oldPath, newPath) => {
-    try {
-        await fsPromises.rename(oldPath, newPath);
-        return true;
-    } catch (err) {
-        console.error('Failed to rename item:', err);
-        return false;
-    }
-});
+ipcMain.handle('fs:rename', (_, oldPath, newPath) => handlers.renameItem(oldPath, newPath));
