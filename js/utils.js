@@ -17,3 +17,5 @@ export const sortItems = arr =>
         if (a.type !== b.type) return a.type === 'folder' ? -1 : 1;
         return b.lastModified - a.lastModified;
     });
+
+export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
