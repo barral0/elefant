@@ -37,15 +37,18 @@ export function updatePreview() {
 }
 
 // ── Load active item into editor ─────────────────────────────
-export function loadActiveItem() {
+export async function loadActiveItem() {
     const item = getActiveItem();
     if (!item) return;
     noteTitleInput.value = item.title;
     if (item.type === 'file') {
+        if (window.electronAPI && item.fsPath && typeof item.content === 'undefined') {
+            item.content = await window.electronAPI.readFile(item.fsPath) || '';
+        }
         editor.value = item.content ?? '';
         updatePreview();
     }
-    persist();
+    if (!window.electronAPI) persist();
 }
 
 // ── Build sidebar tree ────────────────────────────────────────

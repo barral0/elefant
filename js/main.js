@@ -17,6 +17,7 @@ const fileListEl = document.getElementById('file-list');
 const saveBtn = document.getElementById('save-note-btn');
 const newNoteBtn = document.getElementById('new-note-btn');
 const newFolderBtn = document.getElementById('new-folder-btn');
+const openLocalFolderBtn = document.getElementById('open-local-folder-btn');
 const fileInput = document.getElementById('file-input');
 const imageInput = document.getElementById('image-input');
 const editorPane = document.querySelector('.editor-pane');
@@ -115,6 +116,49 @@ imageInput.addEventListener('change', e => {
     openImageModal(e.target.files[0]);
     imageInput.value = '';
 });
+
+// ── Electron (Desktop) Integration ────────────────────────────
+if (window.electronAPI) {
+    // Show the button
+    openLocalFolderBtn.style.display = 'flex';
+    openLocalFolderBtn.title = t('sidebar.open_folder');
+
+    openLocalFolderBtn.addEventListener('click', async () => {
+        const dirPath = await window.electronAPI.openDirectory();
+        if (dirPath) {
+            const items = await window.electronAPI.readDirectory(dirPath);
+            if (items) {
+                // Clear state and inject these files into our app state
+                state.items = items;
+
+                // Add a root pseudo-folder representing the opened directory
+                const rootName = dirPath.split(/[/\\]/).pop() || dirPath;
+                state.items.push({
+                    id: 'fs-root',
+                    type: 'folder',
+                    parentId: null,
+                    title: rootName,
+                    isOpen: true
+                });
+
+                // Attach everything to fs-root
+                state.items.forEach(i => {
+                    if (i.id !== 'fs-root' && typeof i.parentId === 'undefined' || i.parentId === null) {
+                        i.parentId = 'fs-root';
+                    }
+                });
+
+                state.currentItemId = state.items.find(i => i.type === 'file')?.id;
+
+                renderSidebar();
+                await loadActiveItem();
+            }
+        }
+    });
+
+    // We override loadActiveItem inside render.js if we have fsPath
+    // and persistence needs a minor update, but for brevity we allow memory state
+}
 
 // ── Boot ──────────────────────────────────────────────────────
 applyTranslations();

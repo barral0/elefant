@@ -18,8 +18,18 @@ export function updateSaveStatus(text, cls = '') {
     saveStatusEl.textContent = text;
 }
 
-export function autoSave() {
+export async function autoSave() {
     persist();
+
+    // Electron specific autosave to fs
+    if (window.electronAPI) {
+        const { getActiveItem } = await import('./files.js');
+        const item = getActiveItem();
+        if (item && item.type === 'file' && item.fsPath && item.content !== undefined) {
+            await window.electronAPI.writeFile(item.fsPath, item.content);
+        }
+    }
+
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     updateSaveStatus(`Saved at ${time}`);
 }

@@ -1,0 +1,28 @@
+{
+  "name": "elefant",
+  "version": "1.0.0",
+  "description": "> A lightweight, self-hosted markdown editor with live preview, folder organisation, image support, and full theme customisation. No accounts. No cloud. Your notes stay on your device.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barral0/elefant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/barral0/elefant/issues"
+  },
+  "homepage": "https://github.com/barral0/elefant#readme",
+  "devDependencies": {
+    "dotenv": "^17.3.1",
+    "electron": "^40.6.1",
+    "electron-builder": "^26.8.1"
+  }
+}
