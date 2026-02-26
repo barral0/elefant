@@ -34,9 +34,8 @@ export function applyTheme(t = theme) {
     root.style.setProperty('--accent', `hsl(${t.accent})`);
     root.style.setProperty('--accent-glow', `hsla(${t.accent}, 0.2)`);
     root.style.setProperty('--font-mono', t.editorFont);
-    const editor = document.getElementById('editor');
-    editor.style.fontSize = t.fontSize + 'px';
-    editor.style.lineHeight = t.lineHeight;
+    root.style.setProperty('--editor-font-size', t.fontSize + 'px');
+    root.style.setProperty('--editor-line-height', t.lineHeight);
 }
 
 export function saveTheme() {

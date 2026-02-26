@@ -1,0 +1,15 @@
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /css/tokens.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /css/components.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /css/layout.css HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/main.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/state.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/utils.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/persistence.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/render.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/files.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/images.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:05] "GET /js/theme.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:06] "GET /js/i18n.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:06] "GET /js/menus.js HTTP/1.1" 200 -
+127.0.0.1 - - [26/Feb/2026 21:07:06] "GET /js/shortcuts.js HTTP/1.1" 200 -
