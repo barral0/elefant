@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     mkdir: (dirPath) => ipcRenderer.invoke('fs:mkdir', dirPath),
     deleteItem: (itemPath) => ipcRenderer.invoke('fs:delete', itemPath),
     renameItem: (oldPath, newPath) => ipcRenderer.invoke('fs:rename', oldPath, newPath),
+    joinPath: (...parts) => ipcRenderer.invoke('fs:joinPath', ...parts),
 
     // Window Controls
     minimizeWindow: () => ipcRenderer.invoke('window:minimize'),

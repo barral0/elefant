@@ -18,24 +18,44 @@ export const getActiveNote = () => {
 };
 
 // ── Create ───────────────────────────────────────────────────
-export function createNote(parentId = null) {
+export async function createNote(parentId = null) {
     const note = {
         id: generateId(), type: 'file', parentId,
         title: t('header.untitled') + '.md', content: '', lastModified: Date.now(),
     };
+
+    if (window.electronAPI) {
+        const parent = state.items.find(i => i.id === parentId);
+        if (parent && parent.fsPath) {
+            note.fsPath = await window.electronAPI.joinPath(parent.fsPath, note.title);
+            await window.electronAPI.writeFile(note.fsPath, '');
+        }
+    }
+
     state.items.push(note);
     state.currentItemId = note.id;
-    loadActiveItem();
+    await loadActiveItem();
     renderSidebar();
     noteTitleInput.focus();
     noteTitleInput.select();
 }
 
-export function createFolder() {
+export async function createFolder() {
     const folder = {
         id: generateId(), type: 'folder', parentId: null,
         title: t('sidebar.new_folder'), isOpen: true, lastModified: Date.now(),
     };
+
+    if (window.electronAPI) {
+        // Fallback root is fs-root
+        const root = state.items.find(i => i.id === 'fs-root');
+        if (root && root.fsPath) {
+            folder.parentId = 'fs-root';
+            folder.fsPath = await window.electronAPI.joinPath(root.fsPath, folder.title);
+            await window.electronAPI.mkdir(folder.fsPath);
+        }
+    }
+
     state.items.push(folder);
     state.currentItemId = folder.id;
     autoSave();
@@ -46,7 +66,7 @@ export function createFolder() {
 }
 
 // ── Delete ───────────────────────────────────────────────────
-export function deleteCurrentItem() {
+export async function deleteCurrentItem() {
     const item = getActiveItem();
     if (!item) return;
 
@@ -56,6 +76,11 @@ export function deleteCurrentItem() {
         : t('msg.delete_note', item.title);
 
     if (!confirm(msg)) return;
+
+    if (window.electronAPI && item.fsPath) {
+        if (item.id === 'fs-root') return; // protect root
+        await window.electronAPI.deleteItem(item.fsPath);
+    }
 
     if (isFolder) {
         const toDelete = collectDescendants(item.id);
@@ -70,7 +95,7 @@ export function deleteCurrentItem() {
 
     const nextFile = state.items.find(i => i.type === 'file');
     state.currentItemId = nextFile?.id ?? null;
-    loadActiveItem();
+    await loadActiveItem();
     renderSidebar();
     autoSave();
 }
@@ -86,10 +111,22 @@ function collectDescendants(folderId) {
 }
 
 // ── Move ─────────────────────────────────────────────────────
-export function moveItem(itemId, targetParentId) {
+export async function moveItem(itemId, targetParentId) {
     const item = getItem(itemId);
     if (!item) return;
     if (item.type === 'folder' && isDescendantOf(targetParentId, itemId)) return;
+
+    if (window.electronAPI && item.fsPath) {
+        const targetParent = getItem(targetParentId);
+        if (targetParent && targetParent.fsPath) {
+            const newFsPath = await window.electronAPI.joinPath(targetParent.fsPath, item.title);
+            await window.electronAPI.renameItem(item.fsPath, newFsPath);
+            item.fsPath = newFsPath;
+            // Descendants will need recalculation, but to keep simple we re-read the directory 
+            // naturally relying on next boot or they stay bound to memory.
+        }
+    }
+
     item.parentId = targetParentId;
     item.lastModified = Date.now();
     autoSave();

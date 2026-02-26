@@ -117,6 +117,10 @@ editorContextMenu.addEventListener('click', e => {
 
 // ── App menu (three-dot) ──────────────────────────────────────
 export function openAppMenu() {
+    const rect = appMenuBtn.getBoundingClientRect();
+    appMenu.style.top = (rect.bottom + 8) + 'px';
+    appMenu.style.left = (rect.right - 210) + 'px'; // 210px is menu width
+
     appMenu.hidden = false;
     appMenuBtn.setAttribute('aria-expanded', 'true');
 }

@@ -60,6 +60,9 @@ ipcMain.handle('window:close', () => {
 
 // ── IPC Listeners for Local FS ─────────────────────────────────
 
+// Utility path join
+ipcMain.handle('fs:joinPath', (_, ...parts) => path.join(...parts));
+
 // 1. Open Directory Picker dialog
 ipcMain.handle('dialog:openDirectory', async () => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
