@@ -1,10 +1,10 @@
 # ─────────────────────────────────────────────────────────────
-#  Elefant — Minimalist Markdown Editor
+#  Emerald — Minimalist Markdown Editor
 #  Serves the vanilla HTML/CSS/JS app with nginx on port 8095
 # ─────────────────────────────────────────────────────────────
 FROM nginx:1.27-alpine
 
-LABEL org.opencontainers.image.title="Elefant"
+LABEL org.opencontainers.image.title="Emerald"
 LABEL org.opencontainers.image.description="Minimalist Markdown Editor"
 
 # Remove default nginx placeholder content

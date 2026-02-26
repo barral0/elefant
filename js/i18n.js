@@ -4,7 +4,7 @@
 
 export const TRANSLATIONS = {
     en: {
-        'app.title': 'Elefant — Markdown Editor',
+        'app.title': 'Emerald — Markdown Editor',
         'sidebar.notes': 'Notes',
         'sidebar.new_folder': 'New Folder',
         'sidebar.open_folder': 'Open Local Folder',
@@ -78,14 +78,14 @@ export const TRANSLATIONS = {
         'msg.delete_note': 'Delete note "{0}"?',
         'msg.cannot_delete_last': 'Cannot delete the last note.',
         'msg.prompt_url': 'Enter URL:',
-        'home.welcome': 'Welcome to Elefant',
+        'home.welcome': 'Welcome to Emerald',
         'home.subtitle': 'Select a workspace to start writing',
         'home.open_folder': 'Open Existing Folder',
         'home.create_new': 'Create New Workspace',
         'home.close_app': 'Exit Application'
     },
     pt: {
-        'app.title': 'Elefant — Editor Markdown',
+        'app.title': 'Emerald — Editor Markdown',
         'sidebar.notes': 'Notas',
         'sidebar.new_folder': 'Nova Pasta',
         'sidebar.open_folder': 'Abrir Pasta Local',
@@ -159,14 +159,14 @@ export const TRANSLATIONS = {
         'msg.delete_note': 'Excluir nota "{0}"?',
         'msg.cannot_delete_last': 'Não é possível excluir a última nota.',
         'msg.prompt_url': 'Insira a URL:',
-        'home.welcome': 'Bem-vindo ao Elefant',
+        'home.welcome': 'Bem-vindo ao Emerald',
         'home.subtitle': 'Selecione um local para começar a escrever',
         'home.open_folder': 'Abrir Pasta Existente',
         'home.create_new': 'Criar Novo Workspace',
         'home.close_app': 'Sair do Aplicativo'
     },
     es: {
-        'app.title': 'Elefant — Editor Markdown',
+        'app.title': 'Emerald — Editor Markdown',
         'sidebar.notes': 'Notas',
         'sidebar.new_folder': 'Nueva Carpeta',
         'sidebar.open_folder': 'Abrir Carpeta Local',
@@ -232,7 +232,7 @@ export const TRANSLATIONS = {
         'img.quality_hint': '— máximo borde, reduce peso',
         'img.og_size': 'Tamaño original',
         'img.rec_size': '1280 px (recomendado)',
-        'img.thumb_size': '400 px (miniatura)',
+        'img.thumb_size': '400 px (miniatiura)',
         'img.cancel': 'Cancelar',
         'img.insert': 'Insertar',
         'lang.title': 'Idioma (Language)',
@@ -240,7 +240,7 @@ export const TRANSLATIONS = {
         'msg.delete_note': '¿Eliminar nota "{0}"?',
         'msg.cannot_delete_last': 'No se puede eliminar la última nota.',
         'msg.prompt_url': 'Introduzca la URL:',
-        'home.welcome': 'Bienvenido a Elefant',
+        'home.welcome': 'Bienvenido a Emerald',
         'home.subtitle': 'Seleccione un espacio de trabajo para comenzar',
         'home.open_folder': 'Abrir Carpeta Existente',
         'home.create_new': 'Crear Nuevo Espacio',

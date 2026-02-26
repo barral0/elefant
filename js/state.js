@@ -2,11 +2,11 @@
    state.js — Shared application state
    ============================================================= */
 
-const DEFAULT_CONTENT = `# Welcome to Elefant! 🐘
+const DEFAULT_CONTENT = `# Welcome to Emerald! 💎
 
 *(Português abaixo | Español abajo)*
 
-Elefant is a minimalist, self-hosted Markdown editor designed for speed and simplicity. 
+Emerald is a minimalist, self-hosted Markdown editor designed for speed and simplicity. 
 
 - **No accounts, no cloud:** Everything is stored directly in your browser's local storage.
 - **Fast and Distraction-free:** The editor instantly renders your markdown with a live preview.
@@ -17,9 +17,9 @@ To get started, explore the other sample notes in the sidebar, or click the **Ne
 
 ---
 
-# Bem-vindo(a) ao Elefant! 🐘
+# Bem-vindo(a) ao Emerald! 💎
 
-O Elefant é um editor Markdown minimalista e self-hosted (hospedado por você), focado em velocidade e simplicidade.
+O Emerald é um editor Markdown minimalista e self-hosted (hospedado por você), focado em velocidade e simplicidade.
 
 - **Sem contas, sem nuvem:** Tudo fica salvo diretamente no armazenamento local do seu navegador (localStorage).
 - **Rápido e sem distrações:** O editor renderiza seu Markdown instantaneamente com pré-visualização em tempo real.
@@ -30,9 +30,9 @@ Para começar, explore as outras notas de exemplo na barra lateral, ou clique no
 
 ---
 
-# ¡Te damos la bienvenida a Elefant! 🐘
+# ¡Te damos la bienvenida a Emerald! 💎
 
-Elefant es un editor Markdown minimalista y "self-hosted" (autoalojado), diseñado para ser rápido y sencillo.
+Emerald es un editor Markdown minimalista y "self-hosted" (autoalojado), diseñado para ser rápido y sencillo.
 
 - **Sin cuentas ni la nube:** Todo se guarda de forma segura directamente en el almacenamiento local de tu navegador.
 - **Rápido y sin distracciones:** El editor muestra tu código Markdown al instante con vista previa en vivo.

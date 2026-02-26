@@ -1,10 +1,10 @@
-# Elefant — Minimalist Markdown Editor
+# Emerald — Minimalist Markdown Editor
 
 > A beautiful minimalist markdown editor with a modern glassmorphic interface. Available as a standalone **Native Desktop App** (Electron) or a self-hosted web app. Features live preview, deep local folder system synchronization, image visualization, and extensive theme customization. No accounts. No cloud. Your notes stay fully secure on your own machine.
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Try_Elefant-%2325010065?style=for-the-badge)](https://barral0.github.io/elefant/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Try_Emerald-%2325010065?style=for-the-badge)](https://barral0.github.io/emerald/)
 
-![Elefant Screenshot](images/screenshot.png)
+![Emerald Screenshot](images/screenshot.png)
 
 ---
 
@@ -28,12 +28,12 @@
 
 ## 💻 Desktop App (Windows)
 
-Elefant is packaged natively for Windows, allowing seamless local filesystem integration and standalone usage. 
+Emerald is packaged natively for Windows, allowing seamless local filesystem integration and standalone usage. 
 
 **Download the Pre-Built App:**
-1. Navigate to the **[Actions](https://github.com/barral0/elefant/actions)** tab.
+1. Navigate to the **[Actions](https://github.com/barral0/emerald/actions)** tab.
 2. Select the latest **Build Desktop (Windows)** workflow.
-3. Download the built `Elefant-Windows` `.exe` or `.zip` artifact!
+3. Download the built `Emerald-Windows` `.exe` or `.zip` artifact!
 
 **Build from Source:**
 
@@ -59,10 +59,10 @@ Open **http://localhost:8095** in your browser.
 
 ```yaml
 services:
-  elefant:
-    image: elefant:latest
+  emerald:
+    image: emerald:latest
     build: .
-    container_name: elefant
+    container_name: emerald
     restart: unless-stopped
     ports:
       - "8095:8095"
@@ -71,8 +71,8 @@ services:
 ### Build manually
 
 ```bash
-docker build -t elefant:latest .
-docker run -d --name elefant -p 8095:8095 elefant:latest
+docker build -t emerald:latest .
+docker run -d --name emerald -p 8095:8095 emerald:latest
 ```
 
 ### Change the port
@@ -84,7 +84,7 @@ Edit `docker-compose.yml` and `nginx.conf` — replace `8095` with your preferre
 ## 📁 Project Structure
 
 ```text
-elefant/
+emerald/
 ├── main.js                 ← Electron main backend process connecting the filesystem
 ├── preload.js              ← Secure Electron IPC bridge
 ├── package.json            ← Node and Electron-builder build configs
@@ -162,7 +162,7 @@ No data is sent to any server. Clearing browser data will erase your notes — u
 
 ```
 your-domain.com {
-    reverse_proxy elefant:8095
+    reverse_proxy emerald:8095
 }
 ```
 

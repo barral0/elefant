@@ -62,7 +62,7 @@ Standard:
 ![Alt text](https://example.com/image.png)
 ```
 
-Elefant with display width (after inserting via modal):
+Emerald with display width (after inserting via modal):
 ```
 ![Alt text](img://id =600x)
 ```

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Elefant are documented here.
+All notable changes to Emerald are documented here.
 
 ## [Unreleased]
 

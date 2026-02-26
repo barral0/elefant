@@ -1,10 +1,10 @@
 services:
-  elefant:
+  emerald:
     build:
       context: .
       dockerfile: Dockerfile
-    image: elefant:latest
-    container_name: elefant
+    image: emerald:latest
+    container_name: emerald
     restart: unless-stopped
     ports:
       - "8095:8095"

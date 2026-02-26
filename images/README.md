@@ -1,12 +1,12 @@
 # images/
 
-This folder is for visual assets used in the **Elefant** project itself (screenshots, logos, etc.).
+This folder is for visual assets used in the **Emerald** project itself (screenshots, logos, etc.).
 
 ---
 
-## How images work in Elefant
+## How images work in Emerald
 
-Elefant stores user-inserted images in **browser localStorage** as compressed data URLs — not as files on disk. This means:
+Emerald stores user-inserted images in **browser localStorage** as compressed data URLs — not as files on disk. This means:
 
 - Images inserted via the editor are stored automatically in the browser
 - They are referenced in your markdown as `![alt](img://id =600x)`

@@ -9,7 +9,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 800,
-        title: 'Elefant',
+        title: 'Emerald',
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true,

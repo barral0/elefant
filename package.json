@@ -1,5 +1,5 @@
 {
-  "name": "elefant",
+  "name": "emerald",
   "version": "1.0.0",
   "description": "> A lightweight, self-hosted markdown editor with live preview, folder organisation, image support, and full theme customisation. No accounts. No cloud. Your notes stay on your device.",
   "main": "main.js",
@@ -10,24 +10,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/barral0/elefant.git"
+    "url": "git+https://github.com/barral0/emerald.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/barral0/elefant/issues"
+    "url": "https://github.com/barral0/emerald/issues"
   },
-  "homepage": "https://github.com/barral0/elefant#readme",
+  "homepage": "https://github.com/barral0/emerald#readme",
   "devDependencies": {
     "dotenv": "^17.3.1",
     "electron": "^40.6.1",
     "electron-builder": "^26.8.1"
   },
   "build": {
-    "appId": "com.github.barral0.elefant",
-    "productName": "Elefant",
+    "appId": "com.github.barral0.emerald",
+    "productName": "Emerald",
     "directories": {
       "output": "dist"
     },

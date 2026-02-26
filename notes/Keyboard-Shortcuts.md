@@ -1,6 +1,6 @@
 # Keyboard Shortcuts
 
-A complete reference for all Elefant keyboard shortcuts.
+A complete reference for all Emerald keyboard shortcuts.
 
 ---
 
