@@ -5,12 +5,26 @@ import { state } from './state.js';
 
 const saveStatusEl = document.getElementById('save-status');
 let _statusTimer = null;
+let _persistTimer = null;
 
-export function persist() {
+export function saveImmediate() {
+    clearTimeout(_persistTimer); // Clear any pending debounced save
     localStorage.setItem('app-items', JSON.stringify(state.items));
     localStorage.setItem('app-current-item', state.currentItemId);
     localStorage.setItem('app-images', JSON.stringify(state.imageStore));
 }
+
+export function persist() {
+    clearTimeout(_persistTimer);
+    _persistTimer = setTimeout(() => {
+        saveImmediate();
+    }, 1000);
+}
+
+// Ensure data is saved before closing
+window.addEventListener('beforeunload', () => {
+    saveImmediate();
+});
 
 export function updateSaveStatus(text, cls = '') {
     clearTimeout(_statusTimer);
@@ -36,7 +50,7 @@ export async function autoSave() {
 
 export function triggerManualSave() {
     updateSaveStatus('Saving…', 'syncing');
-    persist();
+    saveImmediate(); // Bypass debounce for manual save
     setTimeout(() => {
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         updateSaveStatus('Saved', 'just-saved');
