@@ -56,11 +56,15 @@ export async function commitImageInsert() {
     const dataUrl = await resizeImage(_pendingImageFile, maxEdge);
     const imgId = generateId();
     state.imageStore[imgId] = dataUrl;
-    persist();
 
+    // UI updates first
     const sizeHint = dispWidth ? ` =${dispWidth}x` : '';
     insertAtCursor(`![${alt}](img://${imgId}${sizeHint})`);
     closeImageModal();
+
+    // Defer persistence to unblock UI thread
+    const schedule = window.requestIdleCallback || ((cb) => setTimeout(cb, 0));
+    schedule(() => persist());
 }
 
 // ── Canvas resize ─────────────────────────────────────────────
