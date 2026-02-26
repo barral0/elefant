@@ -150,6 +150,36 @@
     opacity: 1;
 }
 
+.header-lang-select {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 3px 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    outline: none;
+    transition: all var(--transition);
+}
+
+.header-lang-select:hover {
+    background: var(--bg-pane);
+    color: var(--text-primary);
+    border-color: var(--accent);
+}
+
+.header-lang-select:focus {
+    border-color: var(--accent);
+    color: var(--text-primary);
+}
+
+.header-lang-select option {
+    background: var(--bg-pane);
+    color: var(--text-primary);
+}
+
 /* ── Icon buttons ───────────────────────────────────────── */
 .icon-btn {
     background: transparent;
