@@ -2,7 +2,7 @@
    images.js — Image insertion, resizing, and modal logic
    ============================================================= */
 import { state } from './state.js';
-import { generateId } from './utils.js';
+import { generateId, resizeImage } from './utils.js';
 import { persist } from './persistence.js';
 
 const editor = document.getElementById('editor');
@@ -61,31 +61,6 @@ export async function commitImageInsert() {
     const sizeHint = dispWidth ? ` =${dispWidth}x` : '';
     insertAtCursor(`![${alt}](img://${imgId}${sizeHint})`);
     closeImageModal();
-}
-
-// ── Canvas resize ─────────────────────────────────────────────
-function resizeImage(file, maxEdge) {
-    return new Promise(resolve => {
-        const img = new Image();
-        const url = URL.createObjectURL(file);
-        img.onload = () => {
-            URL.revokeObjectURL(url);
-            let { width, height } = img;
-            const canvas = document.createElement('canvas');
-            if (width <= maxEdge && height <= maxEdge) {
-                canvas.width = width;
-                canvas.height = height;
-                canvas.getContext('2d').drawImage(img, 0, 0);
-            } else {
-                const scale = maxEdge / Math.max(width, height);
-                canvas.width = Math.round(width * scale);
-                canvas.height = Math.round(height * scale);
-                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-            }
-            resolve(canvas.toDataURL('image/jpeg', 0.9));
-        };
-        img.src = url;
-    });
 }
 
 // ── Wire up modal events ──────────────────────────────────────
