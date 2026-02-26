@@ -42,6 +42,18 @@ export async function loadActiveItem() {
     if (!item) return;
     noteTitleInput.value = item.title;
 
+    triggerAnimation();
+
+    if (item.type === 'file') {
+        await loadFile(item);
+    } else if (item.type === 'image') {
+        loadImage(item);
+    }
+
+    if (!window.electronAPI) persist();
+}
+
+function triggerAnimation() {
     // Trigger smooth linear animation on note load
     editor.style.animation = 'none';
     preview.style.animation = 'none';
@@ -49,22 +61,22 @@ export async function loadActiveItem() {
     void preview.offsetWidth;
     editor.style.animation = 'smoothFade 0.25s linear';
     preview.style.animation = 'smoothFade 0.25s linear';
+}
 
-    if (item.type === 'file') {
-        if (window.electronAPI && item.fsPath && typeof item.content === 'undefined') {
-            item.content = await window.electronAPI.readFile(item.fsPath) || '';
-        }
-        editor.style.display = 'block';
-        preview.style.display = 'block';
-        editor.value = item.content ?? '';
-        updatePreview();
-    } else if (item.type === 'image') {
-        const imgSrc = item.fsPath ? `file://${item.fsPath.replace(/\\/g, '/')}` : '';
-        editor.style.display = 'none';
-        preview.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;"><img src="${imgSrc}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;"></div>`;
+async function loadFile(item) {
+    if (window.electronAPI && item.fsPath && typeof item.content === 'undefined') {
+        item.content = await window.electronAPI.readFile(item.fsPath) || '';
     }
+    editor.style.display = 'block';
+    preview.style.display = 'block';
+    editor.value = item.content ?? '';
+    updatePreview();
+}
 
-    if (!window.electronAPI) persist();
+function loadImage(item) {
+    const imgSrc = item.fsPath ? `file://${item.fsPath.replace(/\\/g, '/')}` : '';
+    editor.style.display = 'none';
+    preview.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;"><img src="${imgSrc}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;"></div>`;
 }
 
 // ── Build sidebar tree ────────────────────────────────────────
