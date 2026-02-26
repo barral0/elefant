@@ -21,7 +21,7 @@ function resolveImageRefs(md) {
         const src = state.imageStore[imgId];
         if (!src) return `![${alt} (image not found)]()`;
         const sizeAttr = w ? ` width="${w}"` : '';
-        return `<img src="${src}" alt="${alt}"${sizeAttr} style="max-width:100%">`;
+        return `<img src="${src}" alt="${escapeHtml(alt)}"${sizeAttr} style="max-width:100%">`;
     });
 }
 
