@@ -85,9 +85,15 @@ function wrapSelection(prefix, suffix = prefix, placeholder = '') {
 const editorActions = {
     undo: () => document.execCommand('undo'),
     redo: () => document.execCommand('redo'),
-    cut: () => document.execCommand('cut'),
-    copy: () => document.execCommand('copy'),
-    paste: () => navigator.clipboard.readText().then(text => insertAtCursor(text)).catch(() => document.execCommand('paste')),
+    cut: () => {
+        const sel = editor.value.slice(editor.selectionStart, editor.selectionEnd);
+        navigator.clipboard.writeText(sel).then(() => insertAtCursor(''));
+    },
+    copy: () => {
+        const sel = editor.value.slice(editor.selectionStart, editor.selectionEnd);
+        navigator.clipboard.writeText(sel);
+    },
+    paste: () => navigator.clipboard.readText().then(text => insertAtCursor(text)),
     bold: () => wrapSelection('**', '**', t('editor.bold')),
     italic: () => wrapSelection('*', '*', t('editor.italic')),
     code: () => {
