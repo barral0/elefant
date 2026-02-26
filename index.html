@@ -508,6 +508,29 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal-overlay" hidden>
+        <div class="modal delete-modal">
+            <div class="delete-icon-box">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff5f56" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </div>
+            <h3 class="modal-title" id="delete-modal-title" style="margin-bottom: 8px;">Delete Item</h3>
+            <p id="delete-modal-body" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">This
+                action cannot be undone.</p>
+            <div class="modal-actions" style="justify-content: center; gap: 12px;">
+                <button class="btn-secondary" id="delete-cancel-btn" style="flex: 1;"
+                    data-i18n="img.cancel">Cancel</button>
+                <button class="btn-primary danger" id="delete-confirm-btn" style="flex: 1;"
+                    data-i18n="cm.delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ⋮ Main Menu (Moved outside app layout to fix z-index tracking) -->
     <div id="app-menu" class="app-menu" hidden>
         <ul>

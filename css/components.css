@@ -535,8 +535,18 @@
     color: #fff;
 }
 
+.btn-primary.danger {
+    background: #ff5f56;
+}
+
 .btn-primary:hover {
     filter: brightness(1.15);
+}
+
+.btn-primary.danger:hover {
+    background: #ff4b40;
+    box-shadow: 0 4px 12px rgba(255, 95, 86, 0.3);
+    filter: none;
 }
 
 .btn-secondary {

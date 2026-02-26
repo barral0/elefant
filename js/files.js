@@ -5,6 +5,7 @@ import { state } from './state.js';
 import { generateId } from './utils.js';
 import { persist, autoSave } from './persistence.js';
 import { renderSidebar, loadActiveItem } from './render.js';
+import { confirmDelete } from './dialogs.js';
 import { t } from './i18n.js';
 
 const noteTitleInput = document.getElementById('note-title');
@@ -96,7 +97,8 @@ export async function deleteCurrentItem() {
         ? t('msg.delete_folder', item.title)
         : t('msg.delete_note', item.title);
 
-    if (!confirm(msg)) return;
+    const confirmed = await confirmDelete(msg);
+    if (!confirmed) return;
 
     if (window.electronAPI && item.fsPath) {
         if (item.id === 'fs-root') return; // protect root
