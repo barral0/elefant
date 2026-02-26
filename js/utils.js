@@ -4,8 +4,20 @@
 
 export const generateId = () => 'id-' + Math.random().toString(36).slice(2, 11);
 
-export const escapeHtml = str =>
-    str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+/**
+ * Escapes HTML special characters in a string.
+ * Following OWASP recommendations for safe escaping.
+ */
+export const escapeHtml = str => {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[m]);
+};
 
 export const formatDate = ts => {
     const d = new Date(ts);
