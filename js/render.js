@@ -2,7 +2,7 @@
    render.js — Sidebar and preview rendering
    ============================================================= */
 import { state } from './state.js';
-import { escapeHtml, formatDate, sortItems } from './utils.js';
+import { formatDate, sortItems, escapeHtml } from './utils.js';
 import { persist, autoSave } from './persistence.js';
 import { getActiveItem, getActiveNote, moveItem } from './files.js';
 import { showContextMenu } from './menus.js';
@@ -20,8 +20,8 @@ function resolveImageRefs(md) {
     return md.replace(/!\[([^\]]*)\]\(img:\/\/([^)\s]+)(?:\s*=(\d+)x)?\)/g, (_, alt, imgId, w) => {
         const src = state.imageStore[imgId];
         if (!src) return `![${alt} (image not found)]()`;
-        const sizeAttr = w ? ` width="${w}"` : '';
-        return `<img src="${src}" alt="${alt}"${sizeAttr} style="max-width:100%">`;
+        const sizeAttr = w ? ` width="${escapeHtml(w)}"` : '';
+        return `<img src="${src}" alt="${escapeHtml(alt)}"${sizeAttr} style="max-width:100%">`;
     });
 }
 
@@ -82,13 +82,19 @@ function buildFolderEl(item) {
     row.dataset.id = item.id;
     row.draggable = true;
 
-    row.innerHTML = `
-        <span class="folder-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </span>
-        <span class="folder-item-title">${escapeHtml(item.title)}</span>`;
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'folder-icon';
+    iconSpan.innerHTML = `
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>`;
+
+    const titleSpan = document.createElement('span');
+    titleSpan.className = 'folder-item-title';
+    titleSpan.textContent = item.title;
+
+    row.appendChild(iconSpan);
+    row.appendChild(titleSpan);
 
     row.addEventListener('click', e => {
         e.stopPropagation();
@@ -136,9 +142,16 @@ function buildFileEl(item) {
     div.dataset.id = item.id;
     div.draggable = true;
 
-    div.innerHTML = `
-        <div class="file-item-title">${escapeHtml(item.title)}</div>
-        <div class="file-item-date">${formatDate(item.lastModified)}</div>`;
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'file-item-title';
+    titleDiv.textContent = item.title;
+
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'file-item-date';
+    dateDiv.textContent = formatDate(item.lastModified);
+
+    div.appendChild(titleDiv);
+    div.appendChild(dateDiv);
 
     div.addEventListener('click', e => {
         e.stopPropagation();
