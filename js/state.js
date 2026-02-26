@@ -56,9 +56,60 @@ if (_oldNotes && !localStorage.getItem('app-items')) {
     _items = _oldNotes.map(n => ({ ...n, type: 'file', parentId: null }));
 }
 
+// Optimization: O(1) Lookup Map
+const _itemMap = new Map();
+
+function syncMap(items) {
+    _itemMap.clear();
+    items.forEach(i => {
+        if (i && i.id) _itemMap.set(i.id, i);
+    });
+}
+
+function createProxy(items) {
+    syncMap(items);
+    return new Proxy(items, {
+        get(target, prop, receiver) {
+            // Trap mutating array methods to update the map ONCE after the operation completes.
+            if (['push', 'pop', 'shift', 'unshift', 'splice', 'reverse', 'sort'].includes(prop)) {
+                return (...args) => {
+                    const result = Array.prototype[prop].apply(target, args);
+                    syncMap(target);
+                    return result;
+                };
+            }
+            return Reflect.get(target, prop, receiver);
+        },
+        set(target, prop, value, receiver) {
+            const result = Reflect.set(target, prop, value, receiver);
+            // Trap direct index assignment or length truncation
+            if (prop === 'length' || !isNaN(prop)) {
+                syncMap(target);
+            }
+            return result;
+        },
+        deleteProperty(target, prop) {
+            const result = Reflect.deleteProperty(target, prop);
+            if (!isNaN(prop)) {
+                syncMap(target);
+            }
+            return result;
+        }
+    });
+}
+
+let _proxiedItems = createProxy(_items);
+
 export const state = {
-    get items() { return _items; },
-    set items(v) { _items = v; },
+    get items() { return _proxiedItems; },
+    set items(v) {
+        _items = v;
+        _proxiedItems = createProxy(_items);
+    },
+
+    getItemById(id) {
+        return _itemMap.get(id);
+    },
 
     currentItemId: localStorage.getItem('app-current-item') || _items.find(i => i.type === 'file')?.id,
     contextTargetId: null,

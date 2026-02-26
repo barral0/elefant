@@ -10,7 +10,7 @@ import { t } from './i18n.js';
 const noteTitleInput = document.getElementById('note-title');
 
 // ── Accessors ────────────────────────────────────────────────
-export const getItem = id => state.items.find(i => i.id === id);
+export const getItem = id => state.getItemById(id);
 export const getActiveItem = () => getItem(state.currentItemId) || state.items.find(i => i.type === 'file');
 export const getActiveNote = () => {
     const item = getActiveItem();
