@@ -36,12 +36,7 @@ export async function createNote(parentId = null) {
         }
     }
 
-    state.items.push(note);
-    state.currentItemId = note.id;
-    await loadActiveItem();
-    renderSidebar();
-    noteTitleInput.focus();
-    noteTitleInput.select();
+    await finalizeItemCreation(note);
 }
 
 export async function createFolder() {
@@ -59,11 +54,21 @@ export async function createFolder() {
         }
     }
 
-    state.items.push(folder);
-    state.currentItemId = folder.id;
-    autoSave();
+    await finalizeItemCreation(folder);
+}
+
+async function finalizeItemCreation(item) {
+    state.items.push(item);
+    state.currentItemId = item.id;
+
+    if (item.type === 'file') {
+        await loadActiveItem();
+    } else {
+        autoSave();
+        noteTitleInput.value = item.title;
+    }
+
     renderSidebar();
-    noteTitleInput.value = folder.title;
     noteTitleInput.focus();
     noteTitleInput.select();
 }
