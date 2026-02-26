@@ -210,9 +210,11 @@
     right: 0;
     background: var(--bg-pane);
     border: 1px solid var(--border);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
     border-radius: 10px;
     min-width: 210px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    box-shadow: var(--shadow-glass);
     z-index: 1500;
     animation: slideUp 0.13s ease-out;
     overflow: hidden;
@@ -273,11 +275,12 @@
     background: var(--bg-pane);
     border: 1px solid var(--border);
     border-radius: 8px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+    box-shadow: var(--shadow-glass);
     min-width: 160px;
     padding: 5px 0;
     overflow: hidden;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
     animation: menuFadeIn 0.12s ease-out;
 }
 
@@ -382,11 +385,13 @@
 .modal {
     background: var(--bg-pane);
     border: 1px solid var(--border);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
     border-radius: 12px;
     padding: 24px;
     width: 460px;
     max-width: calc(100vw - 32px);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--shadow-glass);
     animation: slideUp 0.15s ease-out;
 }
 
