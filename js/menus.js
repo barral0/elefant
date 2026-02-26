@@ -20,19 +20,22 @@ const imageInput = document.getElementById('image-input');
 const fileInput = document.getElementById('file-input');
 const editor = document.getElementById('editor');
 
+function positionMenu(element, x, y) {
+    element.hidden = false;
+    const mw = element.offsetWidth;
+    const mh = element.offsetHeight;
+    if (x + mw > window.innerWidth) x -= mw;
+    if (y + mh > window.innerHeight) y -= mh;
+    element.style.left = x + 'px';
+    element.style.top = y + 'px';
+}
+
 // ── File-browser context menu ────────────────────────────────
 export function showContextMenu(e, itemId) {
     e.preventDefault();
     e.stopPropagation();
     state.contextTargetId = itemId;
-    contextMenu.hidden = false;
-    const mw = contextMenu.offsetWidth;
-    const mh = contextMenu.offsetHeight;
-    let x = e.clientX, y = e.clientY;
-    if (x + mw > window.innerWidth) x -= mw;
-    if (y + mh > window.innerHeight) y -= mh;
-    contextMenu.style.left = x + 'px';
-    contextMenu.style.top = y + 'px';
+    positionMenu(contextMenu, e.clientX, e.clientY);
 }
 
 export function hideContextMenu() {
@@ -61,14 +64,7 @@ cmDeleteBtn.addEventListener('click', () => {
 // ── Editor context menu ───────────────────────────────────────
 export function showEditorContextMenu(e) {
     e.preventDefault();
-    editorContextMenu.hidden = false;
-    const mw = editorContextMenu.offsetWidth;
-    const mh = editorContextMenu.offsetHeight;
-    let x = e.clientX, y = e.clientY;
-    if (x + mw > window.innerWidth) x -= mw;
-    if (y + mh > window.innerHeight) y -= mh;
-    editorContextMenu.style.left = x + 'px';
-    editorContextMenu.style.top = y + 'px';
+    positionMenu(editorContextMenu, e.clientX, e.clientY);
 }
 
 export function hideEditorContextMenu() {
