@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const fsPromises = fs.promises;
+const { handleWriteFile } = require('./fs-handlers');
 
 let mainWindow;
 
@@ -136,15 +137,7 @@ ipcMain.handle('fs:readFile', async (_, filePath) => {
 });
 
 // 4. Save file to disk
-ipcMain.handle('fs:writeFile', async (_, filePath, content) => {
-    try {
-        await fsPromises.writeFile(filePath, content, 'utf8');
-        return true;
-    } catch (err) {
-        console.error('Failed to write file:', err);
-        return false;
-    }
-});
+ipcMain.handle('fs:writeFile', handleWriteFile);
 
 // 5. Create new folder
 ipcMain.handle('fs:mkdir', async (_, dirPath) => {
