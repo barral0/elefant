@@ -16,6 +16,7 @@ const themeResetBtn = document.getElementById('theme-reset-btn');
 const langSelect = document.getElementById('lang-select');
 
 import { setLang, getLang } from './i18n.js';
+import { hslToHex } from './utils.js';
 
 const THEME_DEFAULTS = {
     mode: 'dark',
@@ -130,14 +131,3 @@ if (langSelect) {
     });
 }
 
-// ── Utility — HSL → Hex ──────────────────────────────────────
-function hslToHex(hsl) {
-    const [h, s, l] = hsl.split(',').map(v => parseFloat(v));
-    const a = s / 100, ll = l / 100;
-    const f = n => {
-        const k = (n + h / 30) % 12;
-        const c = a * Math.min(ll, 1 - ll);
-        return ll - c * Math.max(-1, Math.min(k - 3, 9 - k, 1));
-    };
-    return '#' + [f(0), f(8), f(4)].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('');
-}
