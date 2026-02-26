@@ -1,0 +1,11 @@
+# Legacy monolithic files (superseded by css/ and js/ modules)
+script.js
+style.css
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp

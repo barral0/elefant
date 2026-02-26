@@ -1,0 +1,26 @@
+/* =============================================================
+   tokens.css — CSS custom properties (design tokens)
+   ============================================================= */
+:root {
+    --bg-main: hsl(230, 15%, 10%);
+    --bg-pane: hsl(230, 15%, 14%);
+    --bg-pane-hover: hsl(230, 15%, 18%);
+    --text-primary: hsl(230, 20%, 90%);
+    --text-secondary: hsl(230, 15%, 55%);
+    --accent: hsl(250, 100%, 65%);
+    --accent-glow: hsla(250, 100%, 65%, 0.2);
+    --border: hsl(230, 15%, 20%);
+
+    --font-ui: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'Fira Code', monospace;
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="light"] {
+    --bg-main: hsl(220, 20%, 97%);
+    --bg-pane: hsl(220, 20%, 100%);
+    --bg-pane-hover: hsl(220, 20%, 93%);
+    --text-primary: hsl(230, 30%, 12%);
+    --text-secondary: hsl(230, 15%, 42%);
+    --border: hsl(220, 20%, 85%);
+}

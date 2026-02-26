@@ -1,0 +1,10 @@
+# Ignore everything, then allowlist only what nginx needs to serve
+**
+
+# Web app
+!index.html
+!css/
+!css/*.css
+!js/
+!js/*.js
+!nginx.conf
