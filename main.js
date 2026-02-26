@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { setAllowedDir, isSafePath } = require('./security');
 const fsPromises = fs.promises;
 
 let mainWindow;
@@ -69,11 +70,20 @@ ipcMain.handle('dialog:openDirectory', async () => {
         properties: ['openDirectory']
     });
     if (canceled || filePaths.length === 0) return null;
+
+    // Set the allowed directory for security validation
+    setAllowedDir(filePaths[0]);
+
     return filePaths[0];
 });
 
 // 2. Read all files in a directory (recursive) looking for .md files
 ipcMain.handle('fs:readDirectory', async (_, dirPath) => {
+    if (!isSafePath(dirPath)) {
+        console.error('Security Warning: Access denied to', dirPath);
+        return null;
+    }
+
     const items = [];
 
     async function scan(currentPath, parentId = null) {
@@ -127,6 +137,11 @@ ipcMain.handle('fs:readDirectory', async (_, dirPath) => {
 
 // 3. Read a specific file's content
 ipcMain.handle('fs:readFile', async (_, filePath) => {
+    if (!isSafePath(filePath)) {
+        console.error('Security Warning: Access denied to', filePath);
+        return null;
+    }
+
     try {
         return await fsPromises.readFile(filePath, 'utf8');
     } catch (err) {
@@ -137,6 +152,11 @@ ipcMain.handle('fs:readFile', async (_, filePath) => {
 
 // 4. Save file to disk
 ipcMain.handle('fs:writeFile', async (_, filePath, content) => {
+    if (!isSafePath(filePath)) {
+        console.error('Security Warning: Access denied to', filePath);
+        return false;
+    }
+
     try {
         await fsPromises.writeFile(filePath, content, 'utf8');
         return true;
@@ -148,6 +168,11 @@ ipcMain.handle('fs:writeFile', async (_, filePath, content) => {
 
 // 5. Create new folder
 ipcMain.handle('fs:mkdir', async (_, dirPath) => {
+    if (!isSafePath(dirPath)) {
+        console.error('Security Warning: Access denied to', dirPath);
+        return false;
+    }
+
     try {
         await fsPromises.mkdir(dirPath, { recursive: true });
         return true;
@@ -159,6 +184,11 @@ ipcMain.handle('fs:mkdir', async (_, dirPath) => {
 
 // 6. Delete file or folder
 ipcMain.handle('fs:delete', async (_, itemPath) => {
+    if (!isSafePath(itemPath)) {
+        console.error('Security Warning: Access denied to', itemPath);
+        return false;
+    }
+
     try {
         const stat = await fsPromises.stat(itemPath);
         if (stat.isDirectory()) {
@@ -175,6 +205,11 @@ ipcMain.handle('fs:delete', async (_, itemPath) => {
 
 // 7. Rename file or folder
 ipcMain.handle('fs:rename', async (_, oldPath, newPath) => {
+    if (!isSafePath(oldPath) || !isSafePath(newPath)) {
+        console.error('Security Warning: Access denied to rename', oldPath, 'to', newPath);
+        return false;
+    }
+
     try {
         await fsPromises.rename(oldPath, newPath);
         return true;
