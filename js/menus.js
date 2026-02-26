@@ -2,7 +2,8 @@
    menus.js — File context menu, editor context menu, app menu
    ============================================================= */
 import { state } from './state.js';
-import { insertAtCursor, openImageModal, closeImageModal } from './images.js';
+import { openImageModal, closeImageModal } from './images.js';
+import { insertAtCursor, wrapSelection } from './text-utils.js';
 import { deleteCurrentItem, downloadNote, getActiveItem } from './files.js';
 import { loadActiveItem, renderSidebar } from './render.js';
 import { openThemeModal, closeThemeModal } from './theme.js';
@@ -73,13 +74,6 @@ export function showEditorContextMenu(e) {
 
 export function hideEditorContextMenu() {
     editorContextMenu.hidden = true;
-}
-
-function wrapSelection(prefix, suffix = prefix, placeholder = '') {
-    const start = editor.selectionStart;
-    const end = editor.selectionEnd;
-    const sel = editor.value.slice(start, end) || placeholder;
-    insertAtCursor(prefix + sel + suffix);
 }
 
 const editorActions = {

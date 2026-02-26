@@ -4,6 +4,7 @@
 import { state } from './state.js';
 import { generateId } from './utils.js';
 import { persist } from './persistence.js';
+import { insertAtCursor } from './text-utils.js';
 
 const editor = document.getElementById('editor');
 const imageModalOverlay = document.getElementById('image-modal-overlay');
@@ -15,17 +16,6 @@ const modalCancelBtn = document.getElementById('modal-cancel-btn');
 const modalInsertBtn = document.getElementById('modal-insert-btn');
 
 let _pendingImageFile = null;
-
-// ── Insert at cursor ─────────────────────────────────────────
-export function insertAtCursor(text) {
-    editor.focus();
-    if (!document.execCommand('insertText', false, text)) {
-        const start = editor.selectionStart;
-        const end = editor.selectionEnd;
-        editor.setRangeText(text, start, end, 'end');
-    }
-    editor.dispatchEvent(new Event('input'));
-}
 
 // ── Modal open/close ─────────────────────────────────────────
 export function openImageModal(file) {
