@@ -89,13 +89,31 @@ function buildFolderEl(item) {
     row.dataset.id = item.id;
     row.draggable = true;
 
-    row.innerHTML = `
-        <span class="folder-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </span>
-        <span class="folder-item-title">${escapeHtml(item.title)}</span>`;
+    const folderIconSpan = document.createElement('span');
+    folderIconSpan.className = 'folder-icon';
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '15');
+    svg.setAttribute('height', '15');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2.5');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', '9 18 15 12 9 6');
+
+    svg.appendChild(polyline);
+    folderIconSpan.appendChild(svg);
+
+    const folderTitleSpan = document.createElement('span');
+    folderTitleSpan.className = 'folder-item-title';
+    folderTitleSpan.textContent = item.title;
+
+    row.appendChild(folderIconSpan);
+    row.appendChild(folderTitleSpan);
 
     row.addEventListener('click', e => {
         e.stopPropagation();
@@ -144,17 +162,85 @@ function buildFileEl(item) {
     div.dataset.id = item.id;
     div.draggable = true;
 
-    // Visual queue for image files vs text files
-    const iconSvg = item.type === 'image'
-        ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.6;margin-right:2px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`
-        : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.6;margin-right:2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+    const titleContainer = document.createElement('div');
+    titleContainer.style.display = 'flex';
+    titleContainer.style.alignItems = 'center';
+    titleContainer.style.width = '100%';
 
-    div.innerHTML = `
-        <div style="display:flex;align-items:center;width:100%;">
-            ${iconSvg}
-            <div class="file-item-title" style="margin-left:4px;">${escapeHtml(item.title)}</div>
-        </div>
-        <div class="file-item-date">${formatDate(item.lastModified)}</div>`;
+    const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    iconSvg.setAttribute('width', '14');
+    iconSvg.setAttribute('height', '14');
+    iconSvg.setAttribute('viewBox', '0 0 24 24');
+    iconSvg.setAttribute('fill', 'none');
+    iconSvg.setAttribute('stroke', 'currentColor');
+    iconSvg.setAttribute('stroke-width', '2');
+    iconSvg.setAttribute('stroke-linecap', 'round');
+    iconSvg.setAttribute('stroke-linejoin', 'round');
+    iconSvg.style.flexShrink = '0';
+    iconSvg.style.opacity = '0.6';
+    iconSvg.style.marginRight = '2px';
+
+    if (item.type === 'image') {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', '3');
+        rect.setAttribute('y', '3');
+        rect.setAttribute('width', '18');
+        rect.setAttribute('height', '18');
+        rect.setAttribute('rx', '2');
+        rect.setAttribute('ry', '2');
+        iconSvg.appendChild(rect);
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', '8.5');
+        circle.setAttribute('cy', '8.5');
+        circle.setAttribute('r', '1.5');
+        iconSvg.appendChild(circle);
+
+        const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        polyline.setAttribute('points', '21 15 16 10 5 21');
+        iconSvg.appendChild(polyline);
+    } else {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z');
+        iconSvg.appendChild(path);
+
+        const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        polyline.setAttribute('points', '14 2 14 8 20 8');
+        iconSvg.appendChild(polyline);
+
+        const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line1.setAttribute('x1', '16');
+        line1.setAttribute('y1', '13');
+        line1.setAttribute('x2', '8');
+        line1.setAttribute('y2', '13');
+        iconSvg.appendChild(line1);
+
+        const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line2.setAttribute('x1', '16');
+        line2.setAttribute('y1', '17');
+        line2.setAttribute('x2', '8');
+        line2.setAttribute('y2', '17');
+        iconSvg.appendChild(line2);
+
+        const polyline2 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+        polyline2.setAttribute('points', '10 9 9 9 8 9');
+        iconSvg.appendChild(polyline2);
+    }
+
+    titleContainer.appendChild(iconSvg);
+
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'file-item-title';
+    titleDiv.style.marginLeft = '4px';
+    titleDiv.textContent = item.title;
+    titleContainer.appendChild(titleDiv);
+
+    const dateDiv = document.createElement('div');
+    dateDiv.className = 'file-item-date';
+    dateDiv.textContent = formatDate(item.lastModified);
+
+    div.appendChild(titleContainer);
+    div.appendChild(dateDiv);
 
     div.addEventListener('click', e => {
         e.stopPropagation();
