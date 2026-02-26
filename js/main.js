@@ -55,7 +55,6 @@ editor.addEventListener('input', () => {
     note.lastModified = Date.now();
     updatePreview();
     autoSave();
-    renderSidebar();
 });
 
 // ── File import (.md) ─────────────────────────────────────────
