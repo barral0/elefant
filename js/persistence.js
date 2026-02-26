@@ -2,6 +2,7 @@
    persistence.js — localStorage read/write and save-status UI
    ============================================================= */
 import { state } from './state.js';
+import { delay } from './utils.js';
 
 const saveStatusEl = document.getElementById('save-status');
 let _statusTimer = null;
@@ -34,12 +35,13 @@ export async function autoSave() {
     updateSaveStatus(`Saved at ${time}`);
 }
 
-export function triggerManualSave() {
+export async function triggerManualSave() {
     updateSaveStatus('Saving…', 'syncing');
     persist();
-    setTimeout(() => {
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        updateSaveStatus('Saved', 'just-saved');
-        _statusTimer = setTimeout(() => updateSaveStatus(`Saved at ${time}`), 2000);
-    }, 300);
+
+    await delay(300);
+
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    updateSaveStatus('Saved', 'just-saved');
+    _statusTimer = setTimeout(() => updateSaveStatus(`Saved at ${time}`), 2000);
 }
