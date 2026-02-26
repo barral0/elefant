@@ -146,6 +146,7 @@ appMenu.addEventListener('click', e => {
         case 'open': fileInput.click(); break;
         case 'help': openHelp(); break;
         case 'delete': deleteCurrentItem(); break;
+        case 'close-folder': document.dispatchEvent(new CustomEvent('close-workspace')); break;
     }
 });
 

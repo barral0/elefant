@@ -19,6 +19,7 @@ export const TRANSLATIONS = {
         'menu.open': 'Open File',
         'menu.help': 'Help & Shortcuts',
         'menu.delete': 'Delete Note',
+        'menu.close_workspace': 'Close Workspace',
         'cm.rename': 'Rename',
         'cm.delete': 'Delete',
         'editor.undo': 'Undo',
@@ -76,7 +77,12 @@ export const TRANSLATIONS = {
         'msg.delete_folder': 'Delete folder "{0}" and all its contents?',
         'msg.delete_note': 'Delete note "{0}"?',
         'msg.cannot_delete_last': 'Cannot delete the last note.',
-        'msg.prompt_url': 'Enter URL:'
+        'msg.prompt_url': 'Enter URL:',
+        'home.welcome': 'Welcome to Elefant',
+        'home.subtitle': 'Select a workspace to start writing',
+        'home.open_folder': 'Open Existing Folder',
+        'home.create_new': 'Create New Workspace',
+        'home.close_app': 'Exit Application'
     },
     pt: {
         'app.title': 'Elefant — Editor Markdown',
@@ -94,6 +100,7 @@ export const TRANSLATIONS = {
         'menu.open': 'Abrir Arquivo',
         'menu.help': 'Ajuda & Atalhos',
         'menu.delete': 'Excluir Nota',
+        'menu.close_workspace': 'Fechar Workspace',
         'cm.rename': 'Renomear',
         'cm.delete': 'Excluir',
         'editor.undo': 'Desfazer',
@@ -151,7 +158,12 @@ export const TRANSLATIONS = {
         'msg.delete_folder': 'Excluir pasta "{0}" e todo o seu conteúdo?',
         'msg.delete_note': 'Excluir nota "{0}"?',
         'msg.cannot_delete_last': 'Não é possível excluir a última nota.',
-        'msg.prompt_url': 'Insira a URL:'
+        'msg.prompt_url': 'Insira a URL:',
+        'home.welcome': 'Bem-vindo ao Elefant',
+        'home.subtitle': 'Selecione um local para começar a escrever',
+        'home.open_folder': 'Abrir Pasta Existente',
+        'home.create_new': 'Criar Novo Workspace',
+        'home.close_app': 'Sair do Aplicativo'
     },
     es: {
         'app.title': 'Elefant — Editor Markdown',
@@ -169,6 +181,7 @@ export const TRANSLATIONS = {
         'menu.open': 'Abrir Archivo',
         'menu.help': 'Ayuda y Atajos',
         'menu.delete': 'Eliminar Nota',
+        'menu.close_workspace': 'Cerrar Espacio',
         'cm.rename': 'Renombrar',
         'cm.delete': 'Eliminar',
         'editor.undo': 'Deshacer',
@@ -226,7 +239,12 @@ export const TRANSLATIONS = {
         'msg.delete_folder': '¿Eliminar carpeta "{0}" y todo su contenido?',
         'msg.delete_note': '¿Eliminar nota "{0}"?',
         'msg.cannot_delete_last': 'No se puede eliminar la última nota.',
-        'msg.prompt_url': 'Introduzca la URL:'
+        'msg.prompt_url': 'Introduzca la URL:',
+        'home.welcome': 'Bienvenido a Elefant',
+        'home.subtitle': 'Seleccione un espacio de trabajo para comenzar',
+        'home.open_folder': 'Abrir Carpeta Existente',
+        'home.create_new': 'Crear Nuevo Espacio',
+        'home.close_app': 'Salir de la Aplicación'
     }
 };
 

@@ -18,7 +18,44 @@
 </head>
 
 <body>
-    <div class="app-layout">
+    <!-- Home Screen (Desktop only) -->
+    <div id="home-screen" class="home-screen" style="display: none;">
+        <div class="home-card">
+            <div class="home-logo">🐘</div>
+            <h1 data-i18n="home.welcome">Welcome to Elefant</h1>
+            <p data-i18n="home.subtitle">Select a workspace to start writing</p>
+
+            <div class="home-actions">
+                <button class="home-btn primary" id="home-open-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z">
+                        </path>
+                    </svg>
+                    <span data-i18n="home.open_folder">Open Existing Folder</span>
+                </button>
+                <button class="home-btn secondary" id="home-create-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        <line x1="12" y1="11" x2="12" y2="17"></line>
+                        <line x1="9" y1="14" x2="15" y2="14"></line>
+                    </svg>
+                    <span data-i18n="home.create_new">Create New Workspace</span>
+                </button>
+                <button class="home-btn danger" id="home-close-app-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
+                    </svg>
+                    <span data-i18n="home.close_app">Exit Application</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-layout" id="app-layout">
 
         <!-- Sidebar File Browser -->
         <aside class="sidebar">
@@ -532,6 +569,13 @@
                     </path>
                 </svg>
                 <span data-i18n="menu.delete">Delete Note</span>
+            </li>
+            <li data-menu="close-folder" class="danger" id="menu-close-folder" style="display: none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                </svg>
+                <span data-i18n="menu.close_workspace">Close Workspace</span>
             </li>
         </ul>
     </div>

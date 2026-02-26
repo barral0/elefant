@@ -21,6 +21,11 @@ const openLocalFolderBtn = document.getElementById('open-local-folder-btn');
 const fileInput = document.getElementById('file-input');
 const imageInput = document.getElementById('image-input');
 const editorPane = document.querySelector('.editor-pane');
+const homeScreen = document.getElementById('home-screen');
+const appLayout = document.getElementById('app-layout');
+const homeOpenBtn = document.getElementById('home-open-btn');
+const homeCreateBtn = document.getElementById('home-create-btn');
+const homeCloseAppBtn = document.getElementById('home-close-app-btn');
 
 // ── Marked.js ────────────────────────────────────────────────
 marked.use({ breaks: true, gfm: true });
@@ -136,29 +141,27 @@ imageInput.addEventListener('change', e => {
 
 // ── Electron (Desktop) Integration ────────────────────────────
 if (window.electronAPI) {
-    // Show the button
+    // Show the small sidebar button as well
     openLocalFolderBtn.style.display = 'flex';
     openLocalFolderBtn.title = t('sidebar.open_folder');
 
-    openLocalFolderBtn.addEventListener('click', async () => {
-        const dirPath = await window.electronAPI.openDirectory();
+    const openDirectoryFlow = async (path = null) => {
+        const dirPath = path || await window.electronAPI.openDirectory();
         if (dirPath) {
             const items = await window.electronAPI.readDirectory(dirPath);
             if (items) {
-                // Clear state and inject these files into our app state
                 state.items = items;
-
-                // Add a root pseudo-folder representing the opened directory
                 const rootName = dirPath.split(/[/\\]/).pop() || dirPath;
                 state.items.push({
                     id: 'fs-root',
                     type: 'folder',
                     parentId: null,
                     title: rootName,
-                    isOpen: true
+                    isOpen: true,
+                    fsPath: dirPath
                 });
 
-                // Attach everything to fs-root
+                // Attach orphans to root
                 state.items.forEach(i => {
                     if (i.id !== 'fs-root' && (typeof i.parentId === 'undefined' || i.parentId === null)) {
                         i.parentId = 'fs-root';
@@ -167,17 +170,59 @@ if (window.electronAPI) {
 
                 state.currentItemId = state.items.find(i => i.type === 'file')?.id;
 
+                // Hide home, show app
+                homeScreen.style.display = 'none';
+                appLayout.style.display = 'flex';
+
                 renderSidebar();
                 await loadActiveItem();
             }
         }
+    };
+
+    openLocalFolderBtn.addEventListener('click', () => openDirectoryFlow());
+    homeOpenBtn?.addEventListener('click', () => openDirectoryFlow());
+
+    homeCloseAppBtn?.addEventListener('click', () => {
+        if (window.electronAPI) window.electronAPI.closeWindow();
     });
 
-    // We override loadActiveItem inside render.js if we have fsPath
-    // and persistence needs a minor update, but for brevity we allow memory state
+    homeCreateBtn?.addEventListener('click', async () => {
+        const parentPath = await window.electronAPI.openDirectory();
+        if (parentPath) {
+            const folderName = prompt(t('sidebar.new_folder'), 'My Notes');
+            if (folderName) {
+                const newPath = await window.electronAPI.joinPath(parentPath, folderName);
+                await window.electronAPI.mkdir(newPath);
+                await openDirectoryFlow(newPath);
+            }
+        }
+    });
+
+    // Check if we should show Home Screen or App
+    const hasFSRoot = state.items.some(i => i.id === 'fs-root');
+    if (!hasFSRoot) {
+        homeScreen.style.display = 'flex';
+        appLayout.style.display = 'none';
+    } else {
+        homeScreen.style.display = 'none';
+        appLayout.style.display = 'flex';
+    }
 
     // ── Bind Window Controls ──
     const winControls = document.getElementById('window-controls');
+    const closeFolderMenu = document.getElementById('menu-close-folder');
+    if (closeFolderMenu) closeFolderMenu.style.display = 'flex';
+
+    document.addEventListener('close-workspace', () => {
+        state.items = []; // Clear current items
+        state.currentItemId = null;
+        homeScreen.style.display = 'flex';
+        appLayout.style.display = 'none';
+        persist(); // Clear from local storage persistence
+        renderSidebar();
+    });
+
     if (winControls) {
         winControls.style.display = 'flex';
         document.getElementById('win-min')?.addEventListener('click', () => window.electronAPI.minimizeWindow());
