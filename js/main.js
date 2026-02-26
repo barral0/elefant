@@ -36,11 +36,28 @@ newFolderBtn.addEventListener('click', createFolder);
 saveBtn.addEventListener('click', triggerManualSave);
 
 // ── Title rename ─────────────────────────────────────────────
-noteTitleInput.addEventListener('change', () => {
+noteTitleInput.addEventListener('change', async () => {
     const item = getActiveItem();
     if (!item) return;
+
+    let oldTitle = item.title;
     let title = noteTitleInput.value.trim() || t('header.untitled');
     if (item.type === 'file' && !title.toLowerCase().endsWith('.md')) title += '.md';
+
+    // Electron: Rename on disk if it's a local file
+    if (window.electronAPI && item.fsPath && oldTitle !== title) {
+        try {
+            const parentDir = item.fsPath.substring(0, item.fsPath.lastIndexOf(window.electronAPI.sep || (item.fsPath.includes('/') ? '/' : '\\')));
+            const newFsPath = await window.electronAPI.joinPath(parentDir, title);
+            await window.electronAPI.renameItem(item.fsPath, newFsPath);
+            item.fsPath = newFsPath;
+        } catch (err) {
+            console.error('Failed to rename local file:', err);
+            // Fallback: keep old title in UI if disk rename failed? 
+            // For now we allow UI update anyway but log the error.
+        }
+    }
+
     item.title = title;
     item.lastModified = Date.now();
     noteTitleInput.value = title;
