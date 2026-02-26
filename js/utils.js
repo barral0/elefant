@@ -17,3 +17,26 @@ export const sortItems = arr =>
         if (a.type !== b.type) return a.type === 'folder' ? -1 : 1;
         return b.lastModified - a.lastModified;
     });
+
+export const resizeImage = (file, maxEdge) =>
+    new Promise(resolve => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+            let { width, height } = img;
+            const canvas = document.createElement('canvas');
+            if (width <= maxEdge && height <= maxEdge) {
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0);
+            } else {
+                const scale = maxEdge / Math.max(width, height);
+                canvas.width = Math.round(width * scale);
+                canvas.height = Math.round(height * scale);
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            }
+            resolve(canvas.toDataURL('image/jpeg', 0.9));
+        };
+        img.src = url;
+    });
