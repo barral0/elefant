@@ -8,5 +8,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     writeFile: (filePath, content) => ipcRenderer.invoke('fs:writeFile', filePath, content),
     mkdir: (dirPath) => ipcRenderer.invoke('fs:mkdir', dirPath),
     deleteItem: (itemPath) => ipcRenderer.invoke('fs:delete', itemPath),
-    renameItem: (oldPath, newPath) => ipcRenderer.invoke('fs:rename', oldPath, newPath)
+    renameItem: (oldPath, newPath) => ipcRenderer.invoke('fs:rename', oldPath, newPath),
+
+    // Window Controls
+    minimizeWindow: () => ipcRenderer.invoke('window:minimize'),
+    maximizeWindow: () => ipcRenderer.invoke('window:maximize'),
+    closeWindow: () => ipcRenderer.invoke('window:close')
 });

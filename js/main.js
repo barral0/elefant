@@ -158,6 +158,15 @@ if (window.electronAPI) {
 
     // We override loadActiveItem inside render.js if we have fsPath
     // and persistence needs a minor update, but for brevity we allow memory state
+
+    // ── Bind Window Controls ──
+    const winControls = document.getElementById('window-controls');
+    if (winControls) {
+        winControls.style.display = 'flex';
+        document.getElementById('win-min')?.addEventListener('click', () => window.electronAPI.minimizeWindow());
+        document.getElementById('win-max')?.addEventListener('click', () => window.electronAPI.maximizeWindow());
+        document.getElementById('win-close')?.addEventListener('click', () => window.electronAPI.closeWindow());
+    }
 }
 
 // ── Boot ──────────────────────────────────────────────────────

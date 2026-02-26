@@ -16,7 +16,8 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js')
         },
         backgroundColor: '#1e1e24',
-        autoHideMenuBar: true
+        autoHideMenuBar: true,
+        frame: false, // frameless window to unite controls
     });
 
     // Remove the default toolbar menu completely
@@ -36,6 +37,25 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
+});
+
+// ── IPC Listeners for Window Controls ──────────────────────────
+
+ipcMain.handle('window:minimize', () => {
+    if (mainWindow) mainWindow.minimize();
+});
+
+ipcMain.handle('window:maximize', () => {
+    if (!mainWindow) return;
+    if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize();
+    } else {
+        mainWindow.maximize();
+    }
+});
+
+ipcMain.handle('window:close', () => {
+    if (mainWindow) mainWindow.close();
 });
 
 // ── IPC Listeners for Local FS ─────────────────────────────────

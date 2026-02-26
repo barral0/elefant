@@ -180,6 +180,39 @@
     color: var(--text-primary);
 }
 
+/* ── Window Controls ────────────────────────────────────── */
+.window-controls {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+    -webkit-app-region: no-drag;
+}
+
+.win-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    width: 40px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition), color var(--transition);
+    border-radius: 6px;
+    margin-left: 2px;
+}
+
+.win-btn:hover {
+    background: hsla(230, 15%, 50%, 0.15);
+    color: var(--text-primary);
+}
+
+.win-close:hover {
+    background: #e81123 !important;
+    color: #fff !important;
+}
+
 /* ── Icon buttons ───────────────────────────────────────── */
 .icon-btn {
     background: transparent;

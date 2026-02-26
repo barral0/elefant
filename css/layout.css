@@ -84,6 +84,13 @@ body {
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
+    -webkit-app-region: drag;
+}
+
+.sidebar-actions {
+    display: flex;
+    gap: 2px;
+    -webkit-app-region: no-drag;
 }
 
 .sidebar-header h2 {
@@ -125,6 +132,12 @@ body {
     z-index: 10;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     transition: all var(--transition);
+    -webkit-app-region: drag;
+}
+
+.controls,
+.note-title-input {
+    -webkit-app-region: no-drag;
 }
 
 /* ── Editor / Preview ────────────────────────────────────── */
