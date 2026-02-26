@@ -51,20 +51,28 @@ export async function loadActiveItem() {
     preview.style.animation = 'smoothFade 0.25s linear';
 
     if (item.type === 'file') {
-        if (window.electronAPI && item.fsPath && typeof item.content === 'undefined') {
-            item.content = await window.electronAPI.readFile(item.fsPath) || '';
-        }
-        editor.style.display = 'block';
-        preview.style.display = 'block';
-        editor.value = item.content ?? '';
-        updatePreview();
+        await loadFile(item);
     } else if (item.type === 'image') {
-        const imgSrc = item.fsPath ? `file://${item.fsPath.replace(/\\/g, '/')}` : '';
-        editor.style.display = 'none';
-        preview.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;"><img src="${imgSrc}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;"></div>`;
+        loadImage(item);
     }
 
     if (!window.electronAPI) persist();
+}
+
+async function loadFile(item) {
+    if (window.electronAPI && item.fsPath && typeof item.content === 'undefined') {
+        item.content = await window.electronAPI.readFile(item.fsPath) || '';
+    }
+    editor.style.display = 'block';
+    preview.style.display = 'block';
+    editor.value = item.content ?? '';
+    updatePreview();
+}
+
+function loadImage(item) {
+    const imgSrc = item.fsPath ? `file://${item.fsPath.replace(/\\/g, '/')}` : '';
+    editor.style.display = 'none';
+    preview.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;"><img src="${imgSrc}" style="max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;"></div>`;
 }
 
 // ── Build sidebar tree ────────────────────────────────────────
