@@ -15,8 +15,12 @@ function createWindow() {
             contextIsolation: true,
             preload: path.join(__dirname, 'preload.js')
         },
-        backgroundColor: '#1e1e24'
+        backgroundColor: '#1e1e24',
+        autoHideMenuBar: true
     });
+
+    // Remove the default toolbar menu completely
+    mainWindow.setMenu(null);
 
     // We serve exactly the same index.html
     mainWindow.loadFile('index.html');
