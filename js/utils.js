@@ -2,7 +2,7 @@
    utils.js — Pure utility functions
    ============================================================= */
 
-export const generateId = () => 'id-' + Math.random().toString(36).slice(2, 11);
+export const generateId = () => 'id-' + crypto.randomUUID();
 
 export const escapeHtml = str =>
     str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
